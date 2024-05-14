@@ -11,7 +11,6 @@ import com.kimdo.mybooksearchapp.databinding.FragmentFavoriteBinding
 
 class FavoriteFragment : Fragment() {
 
-
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
 
