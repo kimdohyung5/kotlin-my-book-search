@@ -9,6 +9,12 @@ import com.kimdo.mybooksearchapp.data.model.Book
 import com.kimdo.mybooksearchapp.data.model.SearchResponse
 import com.kimdo.mybooksearchapp.data.repository.BookSearchRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class BookSearchViewModel(
@@ -36,7 +42,13 @@ class BookSearchViewModel(
         bookSearchRepository.deleteBooks(book )
     }
 
-    val favoriteBooks: LiveData<List<Book>> = bookSearchRepository.getFavoriteBooks()
+
+//    val favoriteBooks: Flow<List<Book>> = bookSearchRepository.getFavoriteBooks()
+    val favoriteBooks: StateFlow<List<Book>> = bookSearchRepository.getFavoriteBooks()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), listOf())
+
+
+
 
     var query = String()
         set(value) {

@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,6 +18,9 @@ import com.kimdo.mybooksearchapp.R
 import com.kimdo.mybooksearchapp.databinding.FragmentFavoriteBinding
 import com.kimdo.mybooksearchapp.ui.adapter.BookSearchAdapter
 import com.kimdo.mybooksearchapp.ui.viewmodel.BookSearchViewModel
+import com.kimdo.mybooksearchapp.util.collectLatestStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class FavoriteFragment : Fragment() {
@@ -42,8 +48,25 @@ class FavoriteFragment : Fragment() {
         setupRecyclerView()
         setupTouchHelper(view)
 
-        bookSearchViewModel.favoriteBooks.observe(viewLifecycleOwner) {
-            bookSearchAdapter.submitList( it )
+//        bookSearchViewModel.favoriteBooks.observe(viewLifecycleOwner) {
+//            bookSearchAdapter.submitList( it )
+//        }
+//        lifecycleScope.launch {
+//            bookSearchViewModel.favoriteBooks.collectLatest {
+//                bookSearchAdapter.submitList(it)
+//            }
+//        }
+
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                bookSearchViewModel.favoriteBooks.collectLatest {
+//                    bookSearchAdapter.submitList(it)
+//                }
+//            }
+//        }
+
+        collectLatestStateFlow(bookSearchViewModel.favoriteBooks) {
+            bookSearchAdapter.submitList(it)
         }
     }
 

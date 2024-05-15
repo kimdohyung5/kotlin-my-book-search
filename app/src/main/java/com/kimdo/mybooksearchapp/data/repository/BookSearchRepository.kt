@@ -3,6 +3,7 @@ package com.kimdo.mybooksearchapp.data.repository
 import androidx.lifecycle.LiveData
 import com.kimdo.mybooksearchapp.data.model.Book
 import com.kimdo.mybooksearchapp.data.model.SearchResponse
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface BookSearchRepository {
@@ -18,7 +19,7 @@ interface BookSearchRepository {
 
     suspend fun deleteBooks(book: Book)
 
-    fun getFavoriteBooks(): LiveData<List<Book>>
+    fun getFavoriteBooks(): Flow<List<Book>>
 
 
 }
