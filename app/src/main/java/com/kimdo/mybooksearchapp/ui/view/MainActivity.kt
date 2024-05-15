@@ -12,6 +12,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.kimdo.mybooksearchapp.R
 import com.kimdo.mybooksearchapp.data.api.BookSearchApi
+import com.kimdo.mybooksearchapp.data.db.BookSearchDatabase
 import com.kimdo.mybooksearchapp.data.repository.BookSearchRepositoryImpl
 import com.kimdo.mybooksearchapp.databinding.ActivityMainBinding
 import com.kimdo.mybooksearchapp.ui.viewmodel.BookSearchViewModel
@@ -39,7 +40,8 @@ class MainActivity : AppCompatActivity() {
 
         setupJetpackNavigation()
 
-        val repository = BookSearchRepositoryImpl()
+        val database = BookSearchDatabase.getInstance(this)
+        val repository = BookSearchRepositoryImpl(database)
         val factory = BookSearchViewModelProviderFactory(repository, this)
         bookSearchViewModel = ViewModelProvider(this, factory )[BookSearchViewModel::class.java]
     }
