@@ -1,10 +1,13 @@
 package com.kimdo.mybooksearchapp.data.model
 
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class Book(
     @field:Json(name = "authors")
     val authors: List<String>,
@@ -30,4 +33,4 @@ data class Book(
     val translators: List<String>,
     @field:Json(name = "url")
     val url: String
-)
+) : Parcelable

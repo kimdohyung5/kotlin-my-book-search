@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kimdo.mybooksearchapp.R
@@ -58,6 +59,11 @@ class SearchFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             addItemDecoration(DividerItemDecoration( requireContext(), LinearLayoutManager.VERTICAL))
             adapter = bookSearchAdapter
+        }
+
+        bookSearchAdapter.setOnItemClickListener {
+            val action = SearchFragmentDirections.actionFragmentSearchToFragmentBook(it)
+            findNavController().navigate( action )
         }
     }
 
