@@ -7,11 +7,15 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.kimdo.mybooksearchapp.data.api.RetrofitInstance.api
 import com.kimdo.mybooksearchapp.data.db.BookSearchDatabase
 import com.kimdo.mybooksearchapp.data.model.Book
 import com.kimdo.mybooksearchapp.data.model.SearchResponse
 import com.kimdo.mybooksearchapp.data.repository.BookSearchRepositoryImpl.PreferenceKeys.SORT_MODE
+import com.kimdo.mybooksearchapp.util.Constants.PAGING_SIZE
 import com.kimdo.mybooksearchapp.util.Sort
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -43,6 +47,10 @@ class BookSearchRepositoryImpl (
         return db.bookSearchDao().getFavoriteBooks()
     }
 
+    private object PreferenceKeys {
+        val SORT_MODE = stringPreferencesKey("sort_mode")
+    }
+
     override suspend fun saveSortMode(mode: String) {
         dataStore.edit { prefs ->
             prefs[SORT_MODE] = mode
@@ -64,8 +72,32 @@ class BookSearchRepositoryImpl (
             }
     }
 
-    private object PreferenceKeys {
-        val SORT_MODE = stringPreferencesKey("sort_mode")
+    override fun getFavoritePagingBooks(): Flow<PagingData<Book>> {
+        val pagingSourceFactory = {db.bookSearchDao().getFavoritePagingBooks() }
+
+        return Pager (
+            config = PagingConfig(
+                pageSize = PAGING_SIZE,
+                enablePlaceholders = false,
+                maxSize = PAGING_SIZE * 3
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
     }
+
+    override fun searchBooksPaging(query: String, sort: String): Flow<PagingData<Book>> {
+        val pagingSourceFactory = { BookSearchPagingSource(query, sort )}
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGING_SIZE,
+                enablePlaceholders = false,
+                maxSize =  PAGING_SIZE * 3
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
+    }
+
+
 
 }
