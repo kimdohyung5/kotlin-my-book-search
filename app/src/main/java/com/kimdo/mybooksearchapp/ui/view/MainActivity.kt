@@ -1,8 +1,10 @@
 package com.kimdo.mybooksearchapp.ui.view
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,6 +19,7 @@ import com.kimdo.mybooksearchapp.data.repository.BookSearchRepositoryImpl
 import com.kimdo.mybooksearchapp.databinding.ActivityMainBinding
 import com.kimdo.mybooksearchapp.ui.viewmodel.BookSearchViewModel
 import com.kimdo.mybooksearchapp.ui.viewmodel.BookSearchViewModelProviderFactory
+import com.kimdo.mybooksearchapp.util.Constants.DATASTORE_NAME
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var bookSearchViewModel: BookSearchViewModel
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private val Context.dataStore by preferencesDataStore(DATASTORE_NAME)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root )
@@ -41,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setupJetpackNavigation()
 
         val database = BookSearchDatabase.getInstance(this)
-        val repository = BookSearchRepositoryImpl(database)
+        val repository = BookSearchRepositoryImpl(database, dataStore)
         val factory = BookSearchViewModelProviderFactory(repository, this)
         bookSearchViewModel = ViewModelProvider(this, factory )[BookSearchViewModel::class.java]
     }

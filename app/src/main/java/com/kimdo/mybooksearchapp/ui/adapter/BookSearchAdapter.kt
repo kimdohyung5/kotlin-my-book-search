@@ -9,18 +9,6 @@ import com.kimdo.mybooksearchapp.data.model.Book
 import com.kimdo.mybooksearchapp.databinding.ItemBookPreviewBinding
 
 class BookSearchAdapter: ListAdapter<Book, BookSearchViewHolder>(BookDiffCallback){
-    companion object {
-        private val BookDiffCallback = object : DiffUtil.ItemCallback<Book>() {
-            override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
-                return oldItem.isbn == newItem.isbn
-            }
-
-            override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
-                return oldItem == newItem
-            }
-
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookSearchViewHolder {
         return BookSearchViewHolder(
@@ -39,5 +27,18 @@ class BookSearchAdapter: ListAdapter<Book, BookSearchViewHolder>(BookDiffCallbac
     private var onItemClickListener: ((Book) -> Unit)? = null
     fun setOnItemClickListener(listener: (Book) -> Unit ) {
         onItemClickListener = listener
+    }
+
+    companion object {
+        private val BookDiffCallback = object : DiffUtil.ItemCallback<Book>() {
+            override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
+                return oldItem.isbn == newItem.isbn
+            }
+
+            override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
+                return oldItem == newItem
+            }
+
+        }
     }
 }

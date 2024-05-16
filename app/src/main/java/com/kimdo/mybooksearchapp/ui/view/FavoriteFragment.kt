@@ -84,12 +84,6 @@ class FavoriteFragment : Fragment() {
             findNavController().navigate( action )
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun setupTouchHelper(view: View) {
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback( 0, ItemTouchHelper.LEFT ) {
             override fun onMove(
@@ -115,4 +109,13 @@ class FavoriteFragment : Fragment() {
             attachToRecyclerView(binding.rvFavoriteBooks)
         }
     }
+
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
 }
